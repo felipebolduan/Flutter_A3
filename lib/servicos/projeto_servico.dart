@@ -12,15 +12,30 @@ class ProjetoServico {
     await _firestore.
     collection(userId).
     doc(modelosProjetos.id).
-    set(modelosProjetos.toMap());
+    set(modelosProjetos.toMap("tarefa"));
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> conectarStreamProjeto(){
-    return _firestore.collection(userId).snapshots();
+  Future<void> adicionarLembrete (ModelosProjetos modelosProjetos) async {
+    await _firestore.
+    collection(userId).
+    doc(modelosProjetos.id).
+    set(modelosProjetos.toMap("lembrete"));
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> conectarStreamTarefas(){
+    return _firestore.collection(userId).orderBy("titulo").snapshots();
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> conectarStreamLembretes(){
+    return _firestore.collection(userId).orderBy("titulo").snapshots();
   }
 
   Future<void> removerTarefa({required String idTarefa}){
     return _firestore.collection(userId).doc(idTarefa).delete();
+  }
+
+  Future<void> removerLembrete({required String idLembrete}){
+    return _firestore.collection(userId).doc(idLembrete).delete();
   }
 
 }

@@ -3,13 +3,13 @@ import 'package:projeto_a3/servicos/projeto_servico.dart';
 import 'package:projeto_a3/modelos/modelos_projetos.dart';
 import 'package:projeto_a3/tela_principal.dart';
 
-mostrarTelaTarefa(BuildContext context, {ModelosProjetos? projeto}){
-  return ExercicioTela(modelosProjetos: projeto);
+mostrarTelaLembrete(BuildContext context, {ModelosProjetos? projeto}){
+  return LembreteTela(modelosProjetos: projeto);
 }
 
-class ExercicioTela extends StatelessWidget {
+class LembreteTela extends StatelessWidget {
   final ModelosProjetos? modelosProjetos;
-  ExercicioTela ({super.key, required this.modelosProjetos});
+  LembreteTela ({super.key, required this.modelosProjetos});
   
 
 

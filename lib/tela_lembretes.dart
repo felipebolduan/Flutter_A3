@@ -2,21 +2,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_a3/servicos/autenticacao_servico.dart';
 import 'package:projeto_a3/servicos/projeto_servico.dart';
+import 'package:projeto_a3/tela_cadastroDeLembrete.dart';
 import 'package:projeto_a3/tela_cadastroDeTarefa.dart';
 import 'package:projeto_a3/tela_configuracao.dart';
 import 'package:projeto_a3/modelos/modelos_projetos.dart';
+import 'package:projeto_a3/tela_principal.dart';
 import 'package:projeto_a3/tela_lembretes.dart';
-import 'package:projeto_a3/tela_tarefa.dart';
+import 'package:projeto_a3/tela_lembrete.dart';
 
-class principal_Screen extends StatefulWidget {
+class Reminders_Screen extends StatefulWidget {
   final User user;
-  principal_Screen({super.key, required this.user});
+  Reminders_Screen({super.key, required this.user});
 
   @override
-  State<principal_Screen> createState() => _principalScreenState();
+  State<Reminders_Screen> createState() => _remindersScreenState();
 }
 
-class _principalScreenState extends State<principal_Screen> {
+class _remindersScreenState extends State<Reminders_Screen> {
 
   final ProjetoServico servico = ProjetoServico();
 
@@ -41,7 +43,7 @@ class _principalScreenState extends State<principal_Screen> {
   
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Minhas Tarefas'),
+        title: const Text('Meus Lembretes'),
         centerTitle: true,
       ),
       drawer: Drawer(
@@ -68,7 +70,7 @@ class _principalScreenState extends State<principal_Screen> {
               leading: const Icon(Icons.calendar_month),
               title: const Text("Tarefas"),
               onTap: (){
-                Navigator.of(context).push(
+                Navigator.of(context, rootNavigator: true).push(
                   MaterialPageRoute(builder: (context) => principal_Screen(user: widget.user)),
                 );
               },
@@ -77,7 +79,7 @@ class _principalScreenState extends State<principal_Screen> {
               leading: const Icon(Icons.access_alarm),
               title: const Text("Lembretes"),
               onTap: (){
-                Navigator.of(context).push(
+                Navigator.of(context, rootNavigator: true).push(
                   MaterialPageRoute(builder: (context) => Reminders_Screen(user: widget.user)),
                 );
               },
@@ -97,11 +99,11 @@ class _principalScreenState extends State<principal_Screen> {
         onPressed: (){
           print("Add");
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const NewTaskScreen()),
+                MaterialPageRoute(builder: (context) => const NewReminderScreen()),
               );
         }
         ),
-      body: StreamBuilder(stream: servico.conectarStreamTarefas(), builder: (context, snapshot) {
+      body: StreamBuilder(stream: servico.conectarStreamLembretes(), builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting){
           return const Center(child: CircularProgressIndicator());
         } else {
@@ -109,7 +111,7 @@ class _principalScreenState extends State<principal_Screen> {
             List<ModelosProjetos> listaProjeto = [];
 
             for (var doc in snapshot.data!.docs){
-              if (ModelosProjetos.fromMap(doc.data()).tipo == "tarefa") {
+              if (ModelosProjetos.fromMap(doc.data()).tipo == "lembrete") {
                 listaProjeto.add(ModelosProjetos.fromMap(doc.data()));
               }
             }
@@ -122,7 +124,7 @@ class _principalScreenState extends State<principal_Screen> {
               onTap: () {
                 Navigator.of(context).push<ModelosProjetos>(
                   MaterialPageRoute(
-                    builder: (context) => mostrarTelaTarefa(context, projeto: modelosProjetos)));
+                    builder: (context) => mostrarTelaLembrete(context, projeto: modelosProjetos)));
               },
               title: Text(modelosProjetos.titulo),
               subtitle: 
@@ -134,7 +136,7 @@ class _principalScreenState extends State<principal_Screen> {
                     onPressed: (){
                       Navigator.of(context).push<ModelosProjetos>(
                       MaterialPageRoute(
-                      builder: (context) => mostrarTelaCadastroTarefa(context, projeto: modelosProjetos)));
+                      builder: (context) => mostrarTelaCadastroLembrete(context, projeto: modelosProjetos)));
                     },
                     icon: const Icon(Icons.edit,
                       color: Colors.green,
@@ -142,7 +144,7 @@ class _principalScreenState extends State<principal_Screen> {
                     ),
                   IconButton(
                     onPressed: (){
-                      servico.removerTarefa(idTarefa: modelosProjetos.id);
+                      servico.removerLembrete(idLembrete: modelosProjetos.id);
                     }, 
                     icon: const Icon(Icons.delete,
                       color: Colors.red, 
@@ -154,7 +156,7 @@ class _principalScreenState extends State<principal_Screen> {
       );
           } else {
             return const Center(
-              child: Text("Ainda nenhuma tarefa foi adicionada! 🙁\nVamos adicionar?",
+              child: Text("Ainda nenhum lembrete foi adicionado! 🙁\nVamos adicionar?",
               style: TextStyle(
                 fontSize: 20,
               ),
