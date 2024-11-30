@@ -1,4 +1,4 @@
-package com.example.projeto_a3
+package com.todolist.app
 
 import io.flutter.embedding.android.FlutterActivity
 

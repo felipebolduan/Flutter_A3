@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_a3/api/firebase_api.dart';
 import 'package:projeto_a3/tela_login.dart';
 import 'package:projeto_a3/tela_principal.dart';
 import 'package:projeto_a3/tela_tarefa.dart';
@@ -12,9 +13,10 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
-runApp(MyApp());
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await FirebaseApi().initNotifications();
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget{
