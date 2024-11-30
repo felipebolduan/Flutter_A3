@@ -46,15 +46,6 @@ class ExercicioTela extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               title: Text(modelosProjetos!.descricao),
               leading: const Icon(Icons.double_arrow),
-              trailing: IconButton(
-                icon: const Icon(
-                  Icons.delete,
-                  color: Colors.red,
-                ),
-                onPressed: (){
-                  print("Deletar ${modelosProjetos!.descricao}");
-                },
-                ),
               ),
               const Divider(),
             const Text(
@@ -68,15 +59,6 @@ class ExercicioTela extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               title: Text(modelosProjetos!.data),
               leading: const Icon(Icons.double_arrow),
-              trailing: IconButton(
-                icon: const Icon(
-                  Icons.delete,
-                  color: Colors.red,
-                ),
-                onPressed: (){
-                  print("Deletar ${modelosProjetos!.data}");
-                },
-                ),
               ),
             const Divider(),
             const Text(
@@ -90,15 +72,6 @@ class ExercicioTela extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               title: Text(modelosProjetos!.horario),
               leading: const Icon(Icons.double_arrow),
-              trailing: IconButton(
-                icon: const Icon(
-                  Icons.delete,
-                  color: Colors.red,
-                ),
-                onPressed: (){
-                  print("Deletar ${modelosProjetos!.horario}");
-                },
-                ),
               ),
           ],
         ),
