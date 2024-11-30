@@ -116,12 +116,19 @@ class _principalScreenState extends State<principal_Screen> {
                 children: [
                   IconButton(
                     onPressed: (){
+                      servico.removerTarefa(idTarefa: modelosProjetos.id);
+                    }, 
+                    icon: const Icon(Icons.check,
+                      color: Colors.green, 
+                    )),
+                  IconButton(
+                    onPressed: (){
                       Navigator.of(context).push<ModelosProjetos>(
                       MaterialPageRoute(
                       builder: (context) => mostrarTelaCadatro(context, projeto: modelosProjetos)));
                     },
                     icon: const Icon(Icons.edit,
-                      color: Colors.green,
+                      color: Colors.blue,
                     ),
                     ),
                   IconButton(
