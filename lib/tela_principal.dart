@@ -40,15 +40,19 @@ class _principalScreenState extends State<principal_Screen> {
   
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Minhas Tarefas'),
+        title: const Text('Minhas Tarefas',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
+        backgroundColor: Colors.deepPurple[300],
       ),
       drawer: Drawer(
         child: ListView(
           children: [
             UserAccountsDrawerHeader(
-              currentAccountPicture: const CircleAvatar(
-                backgroundImage: AssetImage("assets/usuario.png"),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: const AssetImage("assets/usuario.png"),
+                backgroundColor: Colors.deepPurple[300],
                 ),
               accountName: Text((widget.user.displayName != null) ? widget.user.displayName! : ""), 
               accountEmail: Text(widget.user.email!),

@@ -17,9 +17,12 @@ class ExercicioTela extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.deepPurple[300],
         title: Column(
           children: [
-          Text(modelosProjetos!.titulo),
+          Text(modelosProjetos!.titulo,
+          style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           ],
         ),
         centerTitle: true,
