@@ -3,13 +3,8 @@ import 'package:uuid/uuid.dart';
 import 'package:projeto_a3/modelos/modelos_projetos.dart';
 import 'package:projeto_a3/servicos/projeto_servico.dart';
 
-mostrarTelaCadatro(BuildContext context, {ModelosProjetos? projeto}) {
-  return Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => NewTaskScreen(modelosProjetos: projeto),
-    ),
-  );
+mostrarTelaCadatro(BuildContext context, {ModelosProjetos? projeto}){
+  return NewTaskScreen(modelosProjetos: projeto,);
 }
 
 class NewTaskScreen extends StatefulWidget {
@@ -80,7 +75,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
           (widget.modelosProjetos != null)
               ? "Editar - ${widget.modelosProjetos!.titulo}"
               : "Criar nova Tarefa",
-          style: TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         leading: const BackButton(),
       ),
