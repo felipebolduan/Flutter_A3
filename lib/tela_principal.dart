@@ -99,6 +99,11 @@ class _principalScreenState extends State<principal_Screen> {
                 (index){
                 ModelosProjetos modelosProjetos = listaProjeto[index];
             return ListTile(
+              onTap: () {
+                Navigator.of(context).push<ModelosProjetos>(
+                  MaterialPageRoute(
+                    builder: (context) => mostrarTelaTarefa(context, projeto: modelosProjetos)));
+              },
               title: Text(modelosProjetos.titulo),
               subtitle: 
               Text(modelosProjetos.data),

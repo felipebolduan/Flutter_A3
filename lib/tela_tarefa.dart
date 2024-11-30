@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_a3/servicos/projeto_servico.dart';
 import 'package:projeto_a3/modelos/modelos_projetos.dart';
+import 'package:projeto_a3/tela_principal.dart';
+
+mostrarTelaTarefa(BuildContext context, {ModelosProjetos? projeto}){
+  return ExercicioTela(modelosProjetos: projeto);
+}
 
 class ExercicioTela extends StatelessWidget {
-  final ModelosProjetos modelosProjetos;
+  final ModelosProjetos? modelosProjetos;
   ExercicioTela ({super.key, required this.modelosProjetos});
   
 
@@ -13,7 +19,7 @@ class ExercicioTela extends StatelessWidget {
       appBar: AppBar(
         title: Column(
           children: [
-          Text(modelosProjetos.titulo),
+          Text(modelosProjetos!.titulo),
           ],
         ),
         centerTitle: true,
@@ -38,7 +44,7 @@ class ExercicioTela extends StatelessWidget {
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
-              title: Text(modelosProjetos.descricao),
+              title: Text(modelosProjetos!.descricao),
               leading: const Icon(Icons.double_arrow),
               trailing: IconButton(
                 icon: const Icon(
@@ -46,7 +52,7 @@ class ExercicioTela extends StatelessWidget {
                   color: Colors.red,
                 ),
                 onPressed: (){
-                  print("Deletar ${modelosProjetos.descricao}");
+                  print("Deletar ${modelosProjetos!.descricao}");
                 },
                 ),
               ),
@@ -60,7 +66,7 @@ class ExercicioTela extends StatelessWidget {
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
-              title: Text(modelosProjetos.data),
+              title: Text(modelosProjetos!.data),
               leading: const Icon(Icons.double_arrow),
               trailing: IconButton(
                 icon: const Icon(
@@ -68,7 +74,7 @@ class ExercicioTela extends StatelessWidget {
                   color: Colors.red,
                 ),
                 onPressed: (){
-                  print("Deletar ${modelosProjetos.data}");
+                  print("Deletar ${modelosProjetos!.data}");
                 },
                 ),
               ),
@@ -82,7 +88,7 @@ class ExercicioTela extends StatelessWidget {
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
-              title: Text(modelosProjetos.horario),
+              title: Text(modelosProjetos!.horario),
               leading: const Icon(Icons.double_arrow),
               trailing: IconButton(
                 icon: const Icon(
@@ -90,7 +96,7 @@ class ExercicioTela extends StatelessWidget {
                   color: Colors.red,
                 ),
                 onPressed: (){
-                  print("Deletar ${modelosProjetos.horario}");
+                  print("Deletar ${modelosProjetos!.horario}");
                 },
                 ),
               ),

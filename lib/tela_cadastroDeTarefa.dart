@@ -6,11 +6,11 @@ import 'package:projeto_a3/tela_principal.dart';
 import 'package:uuid/uuid.dart';
 
 mostrarTelaCadatro(BuildContext context, {ModelosProjetos? projeto}){
-  return NewTaskScreen();
+  return NewTaskScreen(modelosProjetos: projeto);
 }
 class NewTaskScreen extends StatefulWidget {
   final ModelosProjetos? modelosProjetos;
-  const NewTaskScreen({Key? key, this.modelosProjetos}) : super(key:key);
+  const NewTaskScreen({super.key, this.modelosProjetos});
 
   @override
   State<NewTaskScreen> createState() => _NewTaskScreenState();
@@ -47,11 +47,13 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   Widget build(BuildContext context, {ModelosProjetos? projeto}) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          (widget.modelosProjetos != null)
-          ? "Editar ${widget.modelosProjetos!.titulo}"
-          : "Criar nova Tarefa",
-          ),
+        title: Flexible(
+          child: Text(
+            (widget.modelosProjetos != null)
+            ? "Editar ${widget.modelosProjetos!.titulo}"
+            : "Criar nova Tarefa",
+            ),
+        ),
         leading: const BackButton(), 
       ),
           body: Padding(
@@ -154,6 +156,10 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         data: data, 
         horario: horario
         );
+
+        if (widget.modelosProjetos != null){
+          tarefaProjeto.id = widget.modelosProjetos!.id;
+        }
         
         _projetoServico.adicionarTarefa(tarefaProjeto).then((value){
           setState(() {

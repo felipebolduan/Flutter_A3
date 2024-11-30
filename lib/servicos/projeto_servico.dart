@@ -16,7 +16,7 @@ class ProjetoServico {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> conectarStreamProjeto(){
-    return _firestore.collection(userId).snapshots();
+    return _firestore.collection(userId).orderBy("titulo").snapshots();
   }
 
   Future<void> removerTarefa({required String idTarefa}){
