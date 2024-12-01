@@ -1,29 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:provider/provider.dart'; // Import necessário para acessar o ThemeProvider
+import 'package:projeto_a3/theme/theme_provider.dart'; // Importe seu ThemeProvider
 
 class config_Page extends StatefulWidget {
   const config_Page({super.key});
 
   @override
-  _config_PageState createState() => _config_PageState();
+  _ConfigPageState createState() => _ConfigPageState();
 }
 
-class _config_PageState extends State<config_Page> {
-  bool _notificacoesHabilitadas = false; // Estado das notificações
-  bool _sonsHabilitados = true; // Estado dos sons
-  final AudioPlayer _audioPlayer = AudioPlayer();
+class _ConfigPageState extends State<config_Page> {
+  bool _notificacoesHabilitadas = true; // Estado das notificações
+  bool _sonsHabilitados = true;         // Estado dos sons
 
   // Alterna notificações
   void _mudarNotificacao(bool value) {
     setState(() {
       _notificacoesHabilitadas = value;
     });
-
-    if (_notificacoesHabilitadas) {
-      print("Notificações Habilitadas");
-    } else {
-      print("Notificações Desabilitadas");
-    }
   }
 
   // Alterna sons
@@ -31,72 +25,75 @@ class _config_PageState extends State<config_Page> {
     setState(() {
       _sonsHabilitados = value;
     });
-
-    if (_sonsHabilitados) {
-      print("Sons Habilitados");
-    } else {
-      print("Sons Desabilitados");
-    }
-  }
-
-  // Reproduz um som de teste
-  void _tocarSomDeTeste() {
-    if (_sonsHabilitados) {
-      _audioPlayer?.play(AssetSource('click.mp3'));
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context); // Acesse o ThemeProvider
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Configurações"),
+        backgroundColor: Colors.deepPurple[300],
+        title: const Text("Configurações",
+        style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Configuração de notificações
+            // Botão Notificações
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  "Notificações:",
-                  style: TextStyle(fontSize: 20),
+                  "Notificações",
+                  style: TextStyle(fontSize: 18),
                 ),
                 Switch(
                   value: _notificacoesHabilitadas,
                   onChanged: _mudarNotificacao,
                   activeColor: Colors.greenAccent,
-                  inactiveThumbColor: Colors.grey,
-                  inactiveTrackColor: Colors.grey.shade200,
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-            // Configuração de sons
+            const Divider(),
+            // Botão Sons
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  "Sons:",
-                  style: TextStyle(fontSize: 20),
+                  "Sons",
+                  style: TextStyle(fontSize: 18),
                 ),
                 Switch(
                   value: _sonsHabilitados,
                   onChanged: _mudarSons,
                   activeColor: Colors.greenAccent,
-                  inactiveThumbColor: Colors.grey,
-                  inactiveTrackColor: Colors.grey.shade200,
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-            // Botão para testar som
-            ElevatedButton(
-              onPressed: _tocarSomDeTeste,
-              child: const Text("Testar Som"),
+            const Divider(),
+            // Botão Dark Mode
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Modo Escuro",
+                  style: TextStyle(fontSize: 18),
+                ),
+                Switch(
+                  value: themeProvider.themeMode == ThemeMode.dark, // Use o estado do ThemeProvider
+                  onChanged: (value) {
+                    setState(() {
+                      themeProvider.toggleTheme(value);
+                    });
+                  },
+                  activeColor: Colors.greenAccent,
+                ),
+              ],
             ),
           ],
         ),

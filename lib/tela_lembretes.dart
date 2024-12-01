@@ -43,8 +43,11 @@ class _remindersScreenState extends State<Reminders_Screen> {
   
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Meus Lembretes'),
+        title: const Text('Meus Lembretes',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
+        backgroundColor: Colors.deepPurple[300],
       ),
       drawer: Drawer(
         child: ListView(

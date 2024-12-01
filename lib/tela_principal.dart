@@ -41,15 +41,19 @@ class _principalScreenState extends State<principal_Screen> {
   
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Minhas Tarefas'),
+        title: const Text('Minhas Tarefas',
+        style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
+        backgroundColor: Colors.deepPurple[300],
       ),
       drawer: Drawer(
         child: ListView(
           children: [
             UserAccountsDrawerHeader(
-              currentAccountPicture: const CircleAvatar(
-                backgroundImage: AssetImage("assets/usuario.png"),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: const AssetImage("assets/usuario.png"),
+                backgroundColor: Colors.deepPurple[300],
                 ),
               accountName: Text((widget.user.displayName != null) ? widget.user.displayName! : ""), 
               accountEmail: Text(widget.user.email!),
@@ -132,12 +136,19 @@ class _principalScreenState extends State<principal_Screen> {
                 children: [
                   IconButton(
                     onPressed: (){
+                      servico.removerTarefa(idTarefa: modelosProjetos.id);
+                    }, 
+                    icon: const Icon(Icons.check,
+                      color: Colors.green, 
+                    )),
+                  IconButton(
+                    onPressed: (){
                       Navigator.of(context).push<ModelosProjetos>(
                       MaterialPageRoute(
                       builder: (context) => mostrarTelaCadastroTarefa(context, projeto: modelosProjetos)));
                     },
                     icon: const Icon(Icons.edit,
-                      color: Colors.green,
+                      color: Colors.blue,
                     ),
                     ),
                   IconButton(

@@ -6,7 +6,6 @@ import 'package:projeto_a3/tela_cadastro.dart';
 import 'package:projeto_a3/tela_cadastroDeTarefa.dart';
 import 'package:projeto_a3/tela_configuracao.dart';
 import 'package:projeto_a3/tela_principal.dart';
-import 'package:projeto_a3/teste.dart';
 
 class LoginPage extends StatefulWidget {
   @override

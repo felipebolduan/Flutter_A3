@@ -6,57 +6,38 @@ import 'package:projeto_a3/api/firebase_api.dart';
 import 'package:projeto_a3/screens/calendar_screen.dart';
 import 'package:projeto_a3/tela_login.dart';
 import 'package:projeto_a3/tela_principal.dart';
-import 'package:projeto_a3/theme.dart';
+import 'package:projeto_a3/theme/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
+import 'package:projeto_a3/tela_configuracao.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await FirebaseApi().initNotifications();
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    PreferenciaTema.setTema();
-    super.initState();
-  }
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
+  Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
-  @override
-  void didChangePlatformBrightness() {
-    PreferenciaTema.setTema();
-  }
-
-  @override
-Widget build(BuildContext context) {
-  return ValueListenableBuilder(
-    valueListenable: PreferenciaTema.tema,
-    builder: (BuildContext context, Brightness tema, _) => MaterialApp(
+    return MaterialApp(
+      
       title: 'ToDoList',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        brightness: tema,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.deepPurple,
-          titleTextStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-      ),
+      theme: ThemeData.light(), // Tema claro
+      darkTheme: ThemeData.dark(), // Tema escuro
+      themeMode: themeProvider.themeMode, // Controle do modo via ThemeProvider
       supportedLocales: const [
         Locale('en', 'US'), // Inglês
         Locale('pt', 'BR'), // Português do Brasil
@@ -66,14 +47,10 @@ Widget build(BuildContext context) {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      home: RoteadorTela(),
-    ),
-  );
-}
-
-  
+      home: const RoteadorTela(),
+    );
   }
-
+}
 
 class RoteadorTela extends StatelessWidget {
   const RoteadorTela({super.key});
@@ -85,7 +62,7 @@ class RoteadorTela extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           // Caso o usuário esteja autenticado, vá para a tela principal
-          return principal_Screen(user: snapshot.data!,);
+          return principal_Screen(user: snapshot.data!);
         } else {
           // Caso contrário, mostre a página de login
           return LoginPage();

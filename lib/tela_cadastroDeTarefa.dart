@@ -70,10 +70,12 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.deepPurple[300],
         title: Text(
           (widget.modelosProjetos != null)
               ? "Editar - ${widget.modelosProjetos!.titulo}"
               : "Criar nova Tarefa",
+              style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         leading: const BackButton(),
       ),
