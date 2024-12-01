@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_a3/api/firebase_api.dart';
+import 'package:projeto_a3/provider/config_provider.dart';
 import 'package:projeto_a3/screens/calendar_screen.dart';
 import 'package:projeto_a3/tela_login.dart';
 import 'package:projeto_a3/tela_principal.dart';
@@ -19,8 +20,11 @@ void main() async {
   await Firebase.initializeApp();
   await FirebaseApi().initNotifications();
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeProvider()), // Gerenciamento do tema
+        ChangeNotifierProvider(create: (context) => ConfigProvider()), // Gerenciamento de configurações
+      ],
       child: const MyApp(),
     ),
   );
@@ -34,7 +38,6 @@ class MyApp extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return MaterialApp(
-      
       title: 'ToDoList',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(), // Tema claro

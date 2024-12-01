@@ -17,32 +17,18 @@ class principal_Screen extends StatefulWidget {
 }
 
 class _principalScreenState extends State<principal_Screen> {
-
   final ProjetoServico servico = ProjetoServico();
 
-  bool _isEditingText = false;
-  TextEditingController _editingController = TextEditingController();
-  String initialText = "";
-
-  @override
-  void initState() {
-    super.initState();
-    _editingController = TextEditingController(text: initialText);
-  }
-  @override
-  void dispose() {
-    _editingController.dispose();
-    super.dispose();
-  }
+  // Lista para controlar as tarefas concluídas
+  List<String> tarefasConcluidas = [];
 
   @override
   Widget build(BuildContext context) {
-
-  
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Minhas Tarefas',
-        style: TextStyle(fontWeight: FontWeight.bold),
+        title: const Text(
+          'Minhas Tarefas',
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.deepPurple[300],
@@ -55,9 +41,28 @@ class _principalScreenState extends State<principal_Screen> {
                 backgroundImage: const AssetImage("assets/usuario.png"),
                 backgroundColor: Colors.deepPurple[300],
                 ),
-              accountName: Text((widget.user.displayName != null) ? widget.user.displayName! : ""), 
-              accountEmail: Text(widget.user.email!),
+              accountName: Text(
+                (widget.user.displayName != null) ? widget.user.displayName! : "",
+                style: TextStyle(
+                  color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
+                ),
               ),
+              accountEmail: Text(
+                widget.user.email!,
+                style: TextStyle(
+                  color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white70
+                    : Colors.black87,
+                ),
+              ),
+              decoration: BoxDecoration(
+                color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.deepPurple[300]
+              : Colors.deepPurple[200],
+              ),
+            ),
             ListTile(
               leading: const Icon(Icons.key),
               title: const Text("Configurações"),
@@ -97,114 +102,140 @@ class _principalScreenState extends State<principal_Screen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add), 
-        onPressed: (){
-          print("Add");
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const NewTaskScreen()),
-              );
-        }
-        ),
-      body: StreamBuilder(stream: servico.conectarStreamTarefas(), builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting){
-          return const Center(child: CircularProgressIndicator());
-        } else {
-          if (snapshot.hasData && snapshot.data != null && snapshot.data!.docs.isNotEmpty){
-            List<ModelosProjetos> listaProjeto = [];
-
-            for (var doc in snapshot.data!.docs){
-              if (ModelosProjetos.fromMap(doc.data()).tipo == "tarefa") {
-                listaProjeto.add(ModelosProjetos.fromMap(doc.data()));
-              }
-            }
-            return ListView(
-              children: List.generate(
-                listaProjeto.length, 
-                (index){
-                ModelosProjetos modelosProjetos = listaProjeto[index];
-            return ListTile(
-              onTap: () {
-                Navigator.of(context).push<ModelosProjetos>(
-                  MaterialPageRoute(
-                    builder: (context) => mostrarTelaTarefa(context, projeto: modelosProjetos)));
-              },
-              title: Text(modelosProjetos.titulo),
-              subtitle: 
-              Text(modelosProjetos.data),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    onPressed: (){
-                      servico.removerTarefa(idTarefa: modelosProjetos.id);
-                    }, 
-                    icon: const Icon(Icons.check,
-                      color: Colors.green, 
-                    )),
-                  IconButton(
-                    onPressed: (){
-                      Navigator.of(context).push<ModelosProjetos>(
-                      MaterialPageRoute(
-                      builder: (context) => mostrarTelaCadastroTarefa(context, projeto: modelosProjetos)));
-                    },
-                    icon: const Icon(Icons.edit,
-                      color: Colors.blue,
-                    ),
-                    ),
-                  IconButton(
-                    onPressed: (){
-                      servico.removerTarefa(idTarefa: modelosProjetos.id);
-                    }, 
-                    icon: const Icon(Icons.delete,
-                      color: Colors.red, 
-                    ))
-                ],
-              ),
-            );
-          }),
-      );
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const NewTaskScreen()),
+          );
+        },
+      ),
+      body: StreamBuilder(
+        stream: servico.conectarStreamTarefas(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
           } else {
-            return const Center(
-              child: Text("Ainda nenhuma tarefa foi adicionada! 🙁\nVamos adicionar?",
-              style: TextStyle(
-                fontSize: 20,
-              ),
-              textAlign: TextAlign.center,
-              )
-            ,
-            );
-          }
-        }
-      })
-      
-      
-    );
+            if (snapshot.hasData && snapshot.data != null && snapshot.data!.docs.isNotEmpty) {
+              List<ModelosProjetos> listaProjeto = [];
 
-
-    var searchBox = Padding(
-      padding: const EdgeInsets.all(1.0),
-      child: Center(
-        child: TextFormField(
-          decoration: InputDecoration(
-            border: const OutlineInputBorder(
-              // width: 0.0 produces a thin "hairline" border
-              borderSide: const BorderSide(color: Colors.grey, width: 10.0),
-              borderRadius: BorderRadius.all(Radius.circular(50))
-            ),
-            hintText: 'Buscar...',
-            filled: true,
-            suffixIcon: IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: (){
-                print("Search button");
+              for (var doc in snapshot.data!.docs){
+                if (ModelosProjetos.fromMap(doc.data()).tipo == "tarefa") {
+                  listaProjeto.add(ModelosProjetos.fromMap(doc.data()));
+                }
               }
-            )
-          ),
-          autofocus: true,
-          controller: _editingController,
-        )
+
+              // Filtrar tarefas em andamento e concluídas
+              List<ModelosProjetos> tarefasEmAndamento = listaProjeto
+                  .where((tarefa) => !tarefasConcluidas.contains(tarefa.id))
+                  .toList();
+              List<ModelosProjetos> tarefasConcluidasList = listaProjeto
+                  .where((tarefa) => tarefasConcluidas.contains(tarefa.id))
+                  .toList();
+
+              return ListView(
+                children: [
+                  // Seção de Tarefas em Andamento
+                  if (tarefasEmAndamento.isNotEmpty)
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: const Text(
+                        'Tarefas em Andamento',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ...tarefasEmAndamento.map((tarefa) => _buildTarefaTile(tarefa, false)),
+
+                  // Seção de Tarefas Concluídas
+                  if (tarefasConcluidasList.isNotEmpty)
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Tarefas Concluídas',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ...tarefasConcluidasList.map((tarefa) => _buildTarefaTile(tarefa, true)),
+                ],
+              );
+            } else {
+              return const Center(
+                child: Text(
+                  "Ainda nenhuma tarefa foi adicionada! 🙁\nVamos adicionar?",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              );
+            }
+          }
+        },
       ),
     );
-    
   }
+
+  // Widget para construir a tarefa (em andamento ou concluída)
+  Widget _buildTarefaTile(ModelosProjetos tarefa, bool isConcluida) {
+  return ListTile(
+    onTap: () {
+      // Navegar para a tela de tarefa
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => mostrarTelaTarefa(context, projeto: tarefa),
+        ),
+      );
+    },
+    title: Text(
+      tarefa.titulo,
+      style: TextStyle(
+        decoration: isConcluida ? TextDecoration.lineThrough : null,
+        color: isConcluida ? Colors.grey : null,
+      ),
+    ),
+    subtitle: Text(tarefa.data),
+    trailing: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          onPressed: () {
+            setState(() {
+              if (isConcluida) {
+                tarefasConcluidas.remove(tarefa.id);
+              } else {
+                tarefasConcluidas.add(tarefa.id);
+              }
+            });
+          },
+          icon: Icon(
+            Icons.check,
+            color: isConcluida ? Colors.grey : Colors.green,
+          ),
+        ),
+        if (!isConcluida)
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => mostrarTelaCadastroTarefa(context, projeto: tarefa),
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.edit,
+              color: Colors.blue,
+            ),
+          ),
+        IconButton(
+          onPressed: () {
+            servico.removerTarefa(idTarefa: tarefa.id);
+          },
+          icon: const Icon(
+            Icons.delete,
+            color: Colors.red,
+          ),
+        ),
+      ],
+    ),
+  );
+}
 }

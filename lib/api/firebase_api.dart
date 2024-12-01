@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:projeto_a3/main.dart';
 import 'package:projeto_a3/servicos/projeto_servico.dart';
+import 'package:projeto_a3/tela_lembretes.dart';
 import 'package:projeto_a3/tela_tarefa.dart';
 
 @pragma('vm:entry-point')
