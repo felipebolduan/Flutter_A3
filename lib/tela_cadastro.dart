@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_a3/_comum/meu_snackbar.dart';
+import 'package:projeto_a3/main.dart';
 import 'package:projeto_a3/servicos/autenticacao_servico.dart';
 import 'package:projeto_a3/tela_login.dart';
+import 'package:projeto_a3/tela_principal.dart';
 
 class CadastroScreen extends StatefulWidget {
   const CadastroScreen({super.key});
@@ -11,37 +13,30 @@ class CadastroScreen extends StatefulWidget {
 }
 
 class _CadastroScreenState extends State<CadastroScreen> {
-
   final TextEditingController _nomeControler = TextEditingController();
-
   final TextEditingController _emailControler = TextEditingController();
-
   final TextEditingController _telefoneControler = TextEditingController();
-
   final TextEditingController _senhaControler = TextEditingController();
-
-  AutenticacaoServico _autenServico = AutenticacaoServico();
-
+  final AutenticacaoServico _autenServico = AutenticacaoServico();
 
   @override
   Widget build(BuildContext context) {
     var sizedBox = SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: Image.asset('lib/assets/google.png'), // Imagem do ícone do Google
-                  );
+      width: 40,
+      height: 40,
+      child: Image.asset('lib/assets/google.png'), // Imagem do ícone do Google
+    );
     var sizedBox2 = SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: Image.asset('lib/assets/facebook.png'), // Imagem do ícone do Facebook
-                    );
+      width: 40,
+      height: 40,
+      child: Image.asset('lib/assets/facebook.png'), // Imagem do ícone do Facebook
+    );
     var sizedBox3 = SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: Image.asset('lib/assets/apple.png'), // Imagem do ícone da Apple
-                    );
+      width: 40,
+      height: 40,
+      child: Image.asset('lib/assets/apple.png'), // Imagem do ícone da Apple
+    );
     return Scaffold(
-      //backgroundColor: const Color(0xFFEAD1DC), // Cor de fundo semelhante ao roxo claro
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -63,7 +58,6 @@ class _CadastroScreenState extends State<CadastroScreen> {
                   'Cadastre-se para começar',
                   style: TextStyle(
                     fontSize: 16,
-                    //color: Colors.black54,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -98,6 +92,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     labelText: "Senha",
                     prefixIcon: Icon(Icons.lock),
                   ),
+                  obscureText: true,
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
@@ -105,7 +100,6 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     botaoCadastroClicado();
                   },
                   style: ElevatedButton.styleFrom(
-                    
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -115,31 +109,6 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     'Cadastre-se',
                     style: TextStyle(fontSize: 16),
                   ),
-                ),
-                const SizedBox(height: 16),
-                
-                const Text(
-                  'Cadastre-se com:',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: sizedBox,
-                      onPressed: () {},
-                    ),
-                    IconButton(
-                      icon: sizedBox2, 
-                      onPressed: () {},
-                    ),                
-                    IconButton(
-                      icon: sizedBox3,
-                      onPressed: () {},
-                    ),
-                  ],
                 ),
                 const SizedBox(height: 16),
                 TextButton(
@@ -161,40 +130,31 @@ class _CadastroScreenState extends State<CadastroScreen> {
     );
   }
 
-  Widget _buildTextField({required String label, required IconData icon, bool isPassword = false}) {
-    return TextField(
-      obscureText: isPassword,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        filled: true,
-        //fillColor: const Color(0xFFD8BFD8), // Cor de preenchimento dos campos
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide.none,
-        ),
-      ),
-    );
-  }
-  
-  botaoCadastroClicado(){
+  botaoCadastroClicado() async {
     String nome = _nomeControler.text;
     String email = _emailControler.text;
     String telefone = _telefoneControler.text;
     String senha = _senhaControler.text;
 
-    print(
-      _autenServico.cadastrarUsuario(nome: nome, email: email, telefone: telefone, senha: senha)
-      .then(
-        (String? erro) {
-        if (erro != null){
-          mostrarSnackbar(context: context, texto: erro);
-        } else{
-          mostrarSnackbar(context: context, texto: "Cadastro efetuado com sucesso", isErro: false);
-        }
-      },
-
-      )
+    final String? erro = await _autenServico.cadastrarUsuario(
+      nome: nome,
+      email: email,
+      telefone: telefone,
+      senha: senha,
     );
+
+    if (erro != null) {
+      mostrarSnackbar(context: context, texto: erro);
+    } else {
+      mostrarSnackbar(context: context, texto: "Cadastro efetuado com sucesso", isErro: false);
+
+      // Navegar para a tela principal
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => RoteadorTela(),
+        ),
+        (Route<dynamic> route) => false,
+      );
+    }
   }
 }
