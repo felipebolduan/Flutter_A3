@@ -38,4 +38,9 @@ class ProjetoServico {
     return _firestore.collection(userId).doc(idLembrete).delete();
   }
 
+  Future<ModelosProjetos> getSpecific({required String? id}) async {
+    DocumentSnapshot _ds = await _firestore.collection(userId).doc(id).get();;
+    return ModelosProjetos.fromObject(_ds.data());
+  }
+
 }

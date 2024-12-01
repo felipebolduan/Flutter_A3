@@ -22,6 +22,14 @@ class ModelosProjetos {
     data = map["data"], 
     horario = map["horario"],
     tipo = map["tipo"];
+    
+  ModelosProjetos.fromObject(dynamic object): 
+    id = object?.id, 
+    titulo = object?.titulo, 
+    descricao = object?.decricao, 
+    data = object?.data, 
+    horario = object?.horario,
+    tipo = object?.tipo;
 
   Map<String, dynamic> toMap(tipo){
     return {
