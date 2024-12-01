@@ -1,16 +1,43 @@
-# Flutter A3
+# PROJETO A3 - TO-DO LIST
 
-A new Flutter project.
+## Projeto de desenvolvimento para avaliação A3 da UC de Usabilidade, desenvolvimento Web, Mobile e Jogos.
 
-## Getting Started
+Tabela de conteúdos
+=================
+<!--ts-->
+   * [Integrantes](#integrantes)
 
-This project is a starting point for a Flutter application.
+   * [Sobre o Projeto](#sobre-o-projeto)
+      * [Widgets Utilizados](#widgets-utilizados)
+      * [Aprendizados](#aprendizados)
+      * [Referencias](#referencias)
+   * [Link do Drive (Vídeo de Apresentação + PDF)](#tecnologias)
+<!--te-->
 
-A few resources to get you started if this is your first Flutter project:
+### Integrantes
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+ * Felipe Bolduan - RA: 122322052
+ * Gustavo Gabriel Roeder - RA: 122322127
+ * José Matheus Félix de Morais - RA: 12822124926
+ * Jefferson Renê Neves de Brito - RA: 12724231093
+ * Lucas Eduardo Torres Santana – RA: 123223038
+  
+### Sobre o Projeto 
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+O Projeto foi desenvolvido para a UC de Usabilidade, desenvolvimento Web, Mobile e Jogos, onde conseguimos desenvolver conhecimentos acerca de Dart, Flutter e Android Studio, principalmente.
+
+Nesse projeto implementamos e desenvolvemos várias telas (Algumas delas visiveis ao usuário final, como telas de login e cadastro, por exemplo, e outras que não são aparentes ao usuário final mas essenciais para que o sistema flua da melhor maneira possivel).
+
+#### Widgets Utilizados
+
+Os Widgets são questões vitais em um projeto de desenvolvimento Mobile em Flutter, como o professor comenta praticamente tudo no Flutter é Widget. Abaixo deixo alguns dos Widgets Utilizados nesse projeto:
+
+- **AppBar:** 
+- **Icon:** Utilizamos esse Widget na tela principal (Onde usamos os icones de: Check, Edit e Delete);
+- **FutureBuilding e StremBuilding:** Usamos para que possamos identificar o estado de um user
+
+
+
+
+
+

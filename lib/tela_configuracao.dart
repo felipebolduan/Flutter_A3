@@ -1,41 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // Import necessário para acessar o ThemeProvider
-import 'package:projeto_a3/theme/theme_provider.dart'; // Importe seu ThemeProvider
+import 'package:projeto_a3/provider/config_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:projeto_a3/theme/theme_provider.dart';
 
-class config_Page extends StatefulWidget {
+class config_Page extends StatelessWidget {
   const config_Page({super.key});
 
   @override
-  _ConfigPageState createState() => _ConfigPageState();
-}
-
-class _ConfigPageState extends State<config_Page> {
-  bool _notificacoesHabilitadas = true; // Estado das notificações
-  bool _sonsHabilitados = true;         // Estado dos sons
-
-  // Alterna notificações
-  void _mudarNotificacao(bool value) {
-    setState(() {
-      _notificacoesHabilitadas = value;
-    });
-  }
-
-  // Alterna sons
-  void _mudarSons(bool value) {
-    setState(() {
-      _sonsHabilitados = value;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context); // Acesse o ThemeProvider
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final configProvider = Provider.of<ConfigProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepPurple[300],
-        title: const Text("Configurações",
-        style: TextStyle(fontWeight: FontWeight.bold),
+        title: const Text(
+          "Configurações",
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -53,8 +34,8 @@ class _ConfigPageState extends State<config_Page> {
                   style: TextStyle(fontSize: 18),
                 ),
                 Switch(
-                  value: _notificacoesHabilitadas,
-                  onChanged: _mudarNotificacao,
+                  value: configProvider.notificacoesHabilitadas,
+                  onChanged: configProvider.mudarNotificacao,
                   activeColor: Colors.greenAccent,
                 ),
               ],
@@ -69,8 +50,8 @@ class _ConfigPageState extends State<config_Page> {
                   style: TextStyle(fontSize: 18),
                 ),
                 Switch(
-                  value: _sonsHabilitados,
-                  onChanged: _mudarSons,
+                  value: configProvider.sonsHabilitados,
+                  onChanged: configProvider.mudarSons,
                   activeColor: Colors.greenAccent,
                 ),
               ],
@@ -85,11 +66,9 @@ class _ConfigPageState extends State<config_Page> {
                   style: TextStyle(fontSize: 18),
                 ),
                 Switch(
-                  value: themeProvider.themeMode == ThemeMode.dark, // Use o estado do ThemeProvider
+                  value: themeProvider.themeMode == ThemeMode.dark,
                   onChanged: (value) {
-                    setState(() {
-                      themeProvider.toggleTheme(value);
-                    });
+                    themeProvider.toggleTheme(value);
                   },
                   activeColor: Colors.greenAccent,
                 ),
