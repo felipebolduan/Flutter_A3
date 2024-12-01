@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_a3/_comum/meu_snackbar.dart';
 import 'package:projeto_a3/main.dart';
 import 'package:projeto_a3/servicos/autenticacao_servico.dart';
+import 'package:projeto_a3/tela_login.dart';
 import 'package:projeto_a3/tela_principal.dart';
 
 class CadastroScreen extends StatefulWidget {
@@ -110,6 +111,17 @@ class _CadastroScreenState extends State<CadastroScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => LoginPage())
+                    );
+                  },
+                  child: const Text(
+                    'Já possui conta? Entrar',
+                    //style: TextStyle(color: Colors.black54),
+                  ),
+                ),
               ],
             ),
           ),
