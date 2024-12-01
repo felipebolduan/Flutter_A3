@@ -5,6 +5,7 @@ import 'package:projeto_a3/servicos/projeto_servico.dart';
 import 'package:projeto_a3/tela_cadastroDeTarefa.dart';
 import 'package:projeto_a3/tela_configuracao.dart';
 import 'package:projeto_a3/modelos/modelos_projetos.dart';
+import 'package:projeto_a3/tela_lembretes.dart';
 import 'package:projeto_a3/tela_tarefa.dart';
 
 class principal_Screen extends StatefulWidget {
@@ -62,26 +63,44 @@ class _principalScreenState extends State<principal_Screen> {
               : Colors.deepPurple[200],
               ),
             ),
-      ListTile(
-        leading: const Icon(Icons.key),
-        title: const Text("Configurações"),
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const config_Page()),
-          );
-        },
+            ListTile(
+              leading: const Icon(Icons.key),
+              title: const Text("Configurações"),
+              onTap: (){
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => config_Page()),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.calendar_month),
+              title: const Text("Tarefas"),
+              onTap: (){
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => principal_Screen(user: widget.user)),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.access_alarm),
+              title: const Text("Lembretes"),
+              onTap: (){
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => Reminders_Screen(user: widget.user)),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text ("Deslogar"),
+              onTap: (){
+                AutenticacaoServico().deslogar();
+              } ,
+            ),
+          ], 
+        ),
       ),
-      const Divider(),
-      ListTile(
-        leading: const Icon(Icons.logout),
-        title: const Text("Deslogar"),
-        onTap: () {
-          AutenticacaoServico().deslogar();
-        },
-      ),
-    ],
-  ),
-),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
@@ -91,7 +110,7 @@ class _principalScreenState extends State<principal_Screen> {
         },
       ),
       body: StreamBuilder(
-        stream: servico.conectarStreamProjeto(),
+        stream: servico.conectarStreamTarefas(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -99,8 +118,10 @@ class _principalScreenState extends State<principal_Screen> {
             if (snapshot.hasData && snapshot.data != null && snapshot.data!.docs.isNotEmpty) {
               List<ModelosProjetos> listaProjeto = [];
 
-              for (var doc in snapshot.data!.docs) {
-                listaProjeto.add(ModelosProjetos.fromMap(doc.data()));
+              for (var doc in snapshot.data!.docs){
+                if (ModelosProjetos.fromMap(doc.data()).tipo == "tarefa") {
+                  listaProjeto.add(ModelosProjetos.fromMap(doc.data()));
+                }
               }
 
               // Filtrar tarefas em andamento e concluídas
@@ -139,7 +160,7 @@ class _principalScreenState extends State<principal_Screen> {
             } else {
               return const Center(
                 child: Text(
-                  "Ainda nenhum exercício foi adicionado! 🙁\nVamos adicionar?",
+                  "Ainda nenhuma tarefa foi adicionada! 🙁\nVamos adicionar?",
                   style: TextStyle(
                     fontSize: 20,
                   ),
@@ -195,7 +216,7 @@ class _principalScreenState extends State<principal_Screen> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => mostrarTelaCadatro(context, projeto: tarefa),
+                  builder: (context) => mostrarTelaCadastroTarefa(context, projeto: tarefa),
                 ),
               );
             },

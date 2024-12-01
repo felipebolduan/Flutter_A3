@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_a3/api/firebase_api.dart';
 import 'package:projeto_a3/provider/config_provider.dart';
 import 'package:projeto_a3/screens/calendar_screen.dart';
 import 'package:projeto_a3/tela_login.dart';
@@ -12,10 +13,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:projeto_a3/tela_configuracao.dart';
 import 'package:provider/provider.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  
+  await FirebaseApi().initNotifications();
   runApp(
     MultiProvider(
       providers: [

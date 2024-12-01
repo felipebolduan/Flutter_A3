@@ -3,23 +3,23 @@ import 'package:uuid/uuid.dart';
 import 'package:projeto_a3/modelos/modelos_projetos.dart';
 import 'package:projeto_a3/servicos/projeto_servico.dart';
 
-mostrarTelaCadastroTarefa(BuildContext context, {ModelosProjetos? projeto}){
-  return NewTaskScreen(modelosProjetos: projeto,);
+mostrarTelaCadastroLembrete(BuildContext context, {ModelosProjetos? projeto}){
+  return NewReminderScreen(modelosProjetos: projeto,);
 }
 
-class NewTaskScreen extends StatefulWidget {
+class NewReminderScreen extends StatefulWidget {
   final ModelosProjetos? modelosProjetos;
-  const NewTaskScreen({super.key, this.modelosProjetos});
+  const NewReminderScreen({super.key, this.modelosProjetos});
 
   @override
-  State<NewTaskScreen> createState() => _NewTaskScreenState();
+  State<NewReminderScreen> createState() => _NewReminderScreenState();
 }
 
-class _NewTaskScreenState extends State<NewTaskScreen> {
-  final TextEditingController _tituloTarefa = TextEditingController();
-  final TextEditingController _descricaoTarefa = TextEditingController();
-  final TextEditingController _dataTarefa = TextEditingController();
-  final TextEditingController _horaTarefa = TextEditingController();
+class _NewReminderScreenState extends State<NewReminderScreen> {
+  final TextEditingController _tituloLembrete = TextEditingController();
+  final TextEditingController _descricaoLembrete = TextEditingController();
+  final TextEditingController _dataLembrete = TextEditingController();
+  final TextEditingController _horaLembrete = TextEditingController();
 
   bool isCarregando = false;
   final ProjetoServico _projetoServico = ProjetoServico();
@@ -27,10 +27,10 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   @override
   void initState() {
     if (widget.modelosProjetos != null) {
-      _tituloTarefa.text = widget.modelosProjetos!.titulo;
-      _descricaoTarefa.text = widget.modelosProjetos!.descricao;
-      _dataTarefa.text = widget.modelosProjetos!.data;
-      _horaTarefa.text = widget.modelosProjetos!.horario;
+      _tituloLembrete.text = widget.modelosProjetos!.titulo;
+      _descricaoLembrete.text = widget.modelosProjetos!.descricao;
+      _dataLembrete.text = widget.modelosProjetos!.data;
+      _horaLembrete.text = widget.modelosProjetos!.horario;
     }
     super.initState();
   }
@@ -46,7 +46,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
     if (pickedDate != null) {
       setState(() {
-        _dataTarefa.text =
+        _dataLembrete.text =
             '${pickedDate.day.toString().padLeft(2, '0')}/${pickedDate.month.toString().padLeft(2, '0')}/${pickedDate.year}';
       });
     }
@@ -60,7 +60,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
     if (pickedTime != null) {
       setState(() {
-        _horaTarefa.text =
+        _horaLembrete.text =
             '${pickedTime.hour.toString().padLeft(2, '0')}:${pickedTime.minute.toString().padLeft(2, '0')}';
       });
     }
@@ -74,7 +74,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         title: Text(
           (widget.modelosProjetos != null)
               ? "Editar - ${widget.modelosProjetos!.titulo}"
-              : "Criar nova Tarefa",
+              : "Criar novo Lembrete",
               style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         leading: const BackButton(),
@@ -90,10 +90,10 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             ),
             const SizedBox(height: 8),
             TextFormField(
-              controller: _tituloTarefa,
+              controller: _tituloLembrete,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: 'Adicione o título da tarefa',
+                hintText: 'Adicione o título do Lembrete',
               ),
             ),
             const SizedBox(height: 16),
@@ -103,11 +103,11 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             ),
             const SizedBox(height: 8),
             TextFormField(
-              controller: _descricaoTarefa,
+              controller: _descricaoLembrete,
               maxLines: 4,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: 'Adicione a descrição da tarefa',
+                hintText: 'Adicione a descrição do Lembrete',
               ),
             ),
             const SizedBox(height: 16),
@@ -117,7 +117,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             ),
             const SizedBox(height: 8),
             TextFormField(
-              controller: _dataTarefa,
+              controller: _dataLembrete,
               readOnly: true,
               onTap: () => _selecionarData(context),
               decoration: const InputDecoration(
@@ -133,7 +133,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             ),
             const SizedBox(height: 8),
             TextFormField(
-              controller: _horaTarefa,
+              controller: _horaLembrete,
               readOnly: true,
               onTap: () => _selecionarHora(context),
               decoration: const InputDecoration(
@@ -163,29 +163,29 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     isCarregando = true;
   });
 
-  String titulo = _tituloTarefa.text;
-  String descricao = _descricaoTarefa.text;
-  String data = _dataTarefa.text;
-  String horario = _horaTarefa.text;
+  String titulo = _tituloLembrete.text;
+  String descricao = _descricaoLembrete.text;
+  String data = _dataLembrete.text;
+  String horario = _horaLembrete.text;
 
-  ModelosProjetos tarefaProjeto = ModelosProjetos(
+  ModelosProjetos lembreteProjeto = ModelosProjetos(
     id: widget.modelosProjetos?.id ?? const Uuid().v1(), // Se for edição, mantém o ID
     titulo: titulo,
     descricao: descricao,
     data: data,
     horario: horario,
-    tipo: "tarefa"
+    tipo: "lembrete"
   );
 
-  // Salva a tarefa
-  _projetoServico.adicionarTarefa(tarefaProjeto).then((value) {
+  // Salva a Lembrete
+  _projetoServico.adicionarLembrete(lembreteProjeto).then((value) {
     setState(() {
       isCarregando = false;
     });
 
     // Mostra uma mensagem de sucesso
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Tarefa salva com sucesso!')),
+      const SnackBar(content: Text('Lembrete salvo com sucesso!')),
     );
 
     // Fecha a tela e retorna à principal
@@ -197,7 +197,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
     // Mostra mensagem de erro
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Erro ao salvar a tarefa: $error')),
+      SnackBar(content: Text('Erro ao salvar o Lembrete: $error')),
     );
   });
 }
